@@ -38,7 +38,8 @@ function setItem (model, data) {
 app.get('/:model', (req, res) => {
   const { model } = req.params
   if (store[model]) {
-    res.send(store[model])
+    // eslint-disable-next-line eqeqeq
+    res.send(store[model].filter((item) => Object.entries(req.query).every(([field, val]) => item[field] == val)))
   }
   res.status(404).send()
 })
