@@ -8,7 +8,7 @@ const bodyParser = require('body-parser')
 const port = process.env.PORT
 
 const app = express()
-app.use(bodyParser.urlencoded({ extended: false }))
+// app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 const store = {}
@@ -75,22 +75,34 @@ app.post('/:model', (req, res) => {
 app.put('/:model/:id', (req, res) => {
   const { model, id } = req.params
   // replace item
-  const data = setItem(model, { ...req.body, id })
-  res.status(200).send(data)
+  try {
+    const data = setItem(model, { ...req.body, id })
+    res.status(200).send(data)
+  } catch (err) {
+    res.status(404).send(err.message)
+  }
 })
 
 app.patch('/:model/:id', (req, res) => {
   const { model, id } = req.params
   // update item
-  const data = setItem(model, merge(getItem(model, id), req.body))
-  res.status(200).send(data)
+  try {
+    const data = setItem(model, merge(getItem(model, id), req.body))
+    res.status(200).send(data)
+  } catch (err) {
+    res.status(404).send(err.message)
+  }
 })
 
 app.delete('/:model/:id', (req, res) => {
   const { model, id } = req.params
   // delete item
-  const data = deleteItem(model, id)
-  res.status(200).send(data)
+  try {
+    const data = deleteItem(model, id)
+    res.status(200).send(data)
+  } catch (err) {
+    res.status(404).send(err.message)
+  }
 })
 
 app.listen(port, () => {
